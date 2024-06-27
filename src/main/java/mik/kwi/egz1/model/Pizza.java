@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name="Pizzas")
+@Table(name="Pizza")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -15,18 +15,17 @@ import lombok.Setter;
 public class Pizza {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="pizza_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="pizzaId")
     private Integer pizzaId;
-    @Column(name="Name",length = 50)
-    private String name;
+    @Column(name="Nazwa")
+    private String nazwa;
     @Column(name="Price")
     private Double price;
-    @Column(name="Ingredients",length = 300)
+    @Column(name="Rozmiar")
+    private String rozmiar;
+    @Column(name="Ingredients")
     private String ingredients;
 
-    @ManyToOne
-    @JoinColumn(name = "order_id")
-    private Order order;
 
 }

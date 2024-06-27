@@ -19,52 +19,50 @@ import java.util.Optional;
 @RequestMapping("/api/pizza")
 public class PizzaController {
     private static PizzaService pizzaService = null;
+
     @Autowired
-    public PizzaController(PizzaService pizzaService, PizzaServiceImp pizzaServiceImp){
-        PizzaController.pizzaService=pizzaService;
+    public PizzaController(PizzaService pizzaService) {
+        PizzaController.pizzaService = pizzaService;
     }
 
-    @GetMapping("/{pizza_id}")
-    public ResponseEntity<Pizza> getPizza(@PathVariable Integer pizza_id){
-        Optional<Pizza> pizza = pizzaService.getPizza(pizza_id);
-        return ResponseEntity.of(pizza);
-    }
+//    @GetMapping("/{pizza_id}")
+//    public ResponseEntity<Pizza> getPizza(@PathVariable Integer pizza_id) {
+//        Optional<Pizza> pizza = pizzaService.getPizza(pizza_id);
+//        return ResponseEntity.of(pizza);
+//    }
 
     @GetMapping
     public static Page<Pizza> getPizzas(Pageable pageable) {
         return pizzaService.getPizzas(pageable);
     }
-    @PutMapping("/{pizza_id}")
-    public ResponseEntity<Pizza> updatePizza(@PathVariable Integer pizza_id, @Valid @RequestBody Pizza pizza)
-    {
-        Optional<Pizza> existingPizza = pizzaService.getPizza(pizza_id);
-        if(existingPizza.isPresent()){
-            pizzaService.setPizza(pizza);
-            return ResponseEntity.ok().build();
-        }
-        else {
-            return ResponseEntity.notFound().build();
-        }
-    }
+
     @PostMapping
-    public ResponseEntity<Pizza> createPizza( @Valid @RequestBody Pizza pizza)
-    {
+    public ResponseEntity<Void> createPizza(@Valid @RequestBody Pizza pizza) {
         Pizza createdPizza = pizzaService.setPizza(pizza);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{pizza_id}").buildAndExpand(createdPizza.getPizzaId()).toUri();
         return ResponseEntity.created(location).build();
-
     }
-    @DeleteMapping("/{pizza_id}")
-    public ResponseEntity<Void> deletePizza(@PathVariable Integer pizza_id, @Valid @RequestBody Pizza pizza){
-        Optional<Pizza> exisitingPizza = pizzaService.getPizza(pizza_id);
-        if(exisitingPizza.isPresent())
-        {
-            pizzaService.deletePizza(pizza);
-            return ResponseEntity.ok().build();
+
+    @PutMapping("/{pizza_id}")
+    public ResponseEntity<Void> updatePizza(@PathVariable Integer pizza_id, @Valid @RequestBody Pizza pizza) {
+        Optional<Pizza> existingPizza = pizzaService.getPizza(pizza_id);
+        if (existingPizza.isPresent()) {
+            pizzaService.setPizza(pizza);
+            return ResponseEntity.ok().build(); // 200
+        } else {
+            return ResponseEntity.notFound().build(); // 404 - Not found
         }
-        else {
-            return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/{pizza_id}")
+    public ResponseEntity<Void> deletePizza(@PathVariable Integer pizza_id, @Valid @RequestBody Pizza pizza) {
+        Optional<Pizza> existingPizza = pizzaService.getPizza(pizza_id);
+        if (existingPizza.isPresent()) {
+            pizzaService.deletePizza(pizza);
+            return ResponseEntity.ok().build(); // 200
+        } else {
+            return ResponseEntity.notFound().build(); // 404 - Not found
         }
     }
 

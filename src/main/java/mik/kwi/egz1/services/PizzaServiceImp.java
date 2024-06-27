@@ -7,12 +7,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class PizzaServiceImp implements PizzaService {
 
-    PizzaRepo pizzaRepo; //es
+    private final PizzaRepo pizzaRepo; //es
     @Autowired
     public PizzaServiceImp(PizzaRepo pizzaRepo)
     {
@@ -38,4 +39,6 @@ public class PizzaServiceImp implements PizzaService {
     {
         return pizzaRepo.findAll(pageable);
     }
+
+
 }
